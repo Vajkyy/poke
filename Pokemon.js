@@ -1,21 +1,29 @@
 export default class Pokemon {
-    #adatObj = {};
-    #szuloElem;
-  
-    constructor(adat, szuloElem) {
-      this.#adatObj = adat;
-      this.#szuloElem = szuloElem;
-      this.megjelenit();
-    }
-  
-    megjelenit() {
-      let html = `
-        <div class="kartya">
-          <img src="${this.#adatObj.sprites.front_default}" alt="Pokémon kép">
-          <h2>${this.#adatObj.name}</h2>
-        </div>
-      `;
-      this.#szuloElem.insertAdjacentHTML("beforeend", html);
-    }
+  #adatObj = {};
+  #szuloElem;
+  #kattintasCallback;
+
+  constructor(adat, szuloElem, kattintasCallback) {
+    this.#adatObj = adat;
+    this.#szuloElem = szuloElem;
+    this.#kattintasCallback = kattintasCallback;
+    this.megjelenit();
   }
-  
+
+  megjelenit() {
+    let kartya = document.createElement("div");
+    kartya.classList.add("kartya");
+    kartya.innerHTML = `
+      <img src="${this.#adatObj.sprites.front_default}" alt="Pokémon kép">
+      <h2>${this.#adatObj.name}</h2>
+      <button>Kiválaszt</button>
+    `;
+
+    const gomb = kartya.querySelector("button");
+    gomb.addEventListener("click", () => {
+      this.#kattintasCallback(this.#adatObj);
+    });
+
+    this.#szuloElem.appendChild(kartya);
+  }
+}
